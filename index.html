@@ -6,7 +6,7 @@
     <title>Iron Dosing Guide</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding: 40px 20px; }
-        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 100%; max-width: 550px; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 100%; max-width: 650px; }
         
         .header-container { text-align: center; margin-bottom: 20px; }
         .main-heading { 
@@ -24,34 +24,40 @@
             font-weight: 400;
         }
 
-        /* The Formula Box */
         .formula-box {
-            background-color: #eef2ff; /* Light blue/indigo tint */
-            border: 2px solid #3f51b5;   /* Stronger blue border */
+            background-color: #eef2ff;
+            border: 2px solid #3f51b5;
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 25px;
             color: #1a237e;
             text-align: center;
         }
-        .ganzoni-title { 
-            font-weight: bold; 
-            display: block; 
-            margin-bottom: 8px; 
-            text-decoration: underline;
-        }
-        .formula-text {
-            font-family: "Courier New", Courier, monospace;
-            font-weight: bold;
-            font-size: 0.95rem;
-            line-height: 1.4;
-        }
+        .ganzoni-title { font-weight: bold; display: block; margin-bottom: 8px; text-decoration: underline; }
+        .formula-text { font-family: "Courier New", Courier, monospace; font-weight: bold; font-size: 0.95rem; line-height: 1.4; }
 
-        .input-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: #34495e; font-size: 0.95rem; }
+        .input-row { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .input-group { flex: 1; min-width: 200px; }
+        .side-note { 
+            flex: 1.5; 
+            font-size: 0.85rem; 
+            color: #6c757d; 
+            font-style: italic;
+            border-left: 3px solid #dee2e6;
+            padding-left: 10px;
+            margin-top: 15px;
+        }
+        
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #34495e; font-size: 0.9rem; }
         input { 
             width: 100%; 
-            padding: 12px; 
+            padding: 10px; 
             border: 1px solid #ccd1d1; 
             border-radius: 6px; 
             box-sizing: border-box; 
@@ -61,7 +67,7 @@
         .result-box { 
             margin-top: 25px; 
             padding: 20px; 
-            background: #fdf2f2; /* Light red tint for visibility */
+            background: #fdf2f2;
             border-radius: 8px; 
             border: 1px solid #f5b7b1;
         }
@@ -86,21 +92,40 @@
         </div>
     </div>
     
-    <div class="input-group">
-        <label for="weight">Patient Body Weight (kg)</label>
-        <input type="number" id="weight" placeholder="e.g. 50" oninput="calculateDose()">
+    <div class="input-row">
+        <div class="input-group">
+            <label for="weight">Patient Body Weight (kg)</label>
+            <input type="number" id="weight" placeholder="e.g. 50" oninput="calculateDose()">
+        </div>
+        <div class="side-note">
+            The body weight used is the pre-pregnancy weight or weight at booking visit.
+        </div>
     </div>
 
-    <div class="input-group">
-        <label for="hb">Current Hemoglobin level (g/dL)</label>
-        <input type="number" step="0.1" id="hb" placeholder="e.g. 11.0" oninput="calculateDose()">
+    <div class="input-row">
+        <div class="input-group">
+            <label for="hb">Current Hemoglobin level (g/dL)</label>
+            <input type="number" step="0.1" id="hb" placeholder="e.g. 11.0" oninput="calculateDose()">
+        </div>
+        <div class="side-note">
+            Enter the patient's most recent lab result.
+        </div>
+    </div>
+
+    <div class="input-row">
+        <div class="input-group">
+            <label for="targetHb">Target Hemoglobin level (g/dL)</label>
+            <input type="number" step="0.1" id="targetHb" value="13.0" oninput="calculateDose()">
+        </div>
+        <div class="side-note">
+            Target haemoglobin level for treatment: 13.0 g/dl
+        </div>
     </div>
 
     <div id="results" class="result-box" style="display:none;">
-        <div class="result-item">Target Hb: <strong>13.0 g/dL</strong></div>
         <div class="result-item">Iron Store: <span><span id="resStore">0</span> mg</span></div>
         <div class="result-item" style="border-top: 2px solid #f5b7b1; padding-top: 15px; margin-top: 10px;">
-            <strong>Total Iron Dose:</strong> 
+            <strong>Total Iron Dose Calculated:</strong> 
             <span><span id="resRounded" class="highlight">0</span> <span class="highlight">mg</span></span>
         </div>
         <div style="font-size: 0.75rem; color: #7f8c8d; text-align: right;">(Rounded to nearest 100mg)</div>
@@ -108,8 +133,8 @@
 
     <div class="disclaimer">
         <strong>Iron Store Reference:</strong><br>
-        < 35kg: 15mg x weight (kg) | ≥ 35kg: 500mg<br><br>
-        Clinical reference only. Verify calculations manually.
+        If < 35kg: 15mg x weight (kg) | If ≥ 35kg: 500mg<br><br>
+        Clinical reference only. Please verify calculations manually.
     </div>
 </div>
 
@@ -117,21 +142,21 @@
     function calculateDose() {
         const weight = parseFloat(document.getElementById('weight').value);
         const hb = parseFloat(document.getElementById('hb').value);
-        const targetHb = 13.0; // Fixed as per your Excel sheet
+        const targetHbInput = parseFloat(document.getElementById('targetHb').value);
         const resultsDiv = document.getElementById('results');
 
-        if (isNaN(weight) || isNaN(hb) || weight <= 0) {
+        if (isNaN(weight) || isNaN(hb) || isNaN(targetHbInput) || weight <= 0) {
             resultsDiv.style.display = 'none';
             return;
         }
 
         resultsDiv.style.display = 'block';
 
-        // Iron Store Logic: <35kg = 15mg/kg, >=35kg = 500mg
+        // Iron Store Logic
         let ironStore = (weight < 35) ? (15 * weight) : 500;
 
-        // Ganzoni Calculation: weight * (13.0 - hb) * 10 * 0.24 + ironStore
-        let rawDose = weight * (targetHb - hb) * 2.4 + ironStore;
+        // Ganzoni Calculation using the user-defined target Hb
+        let rawDose = weight * (targetHbInput - hb) * 2.4 + ironStore;
         
         if (rawDose < 0) rawDose = 0;
 
