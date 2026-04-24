@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iron Dosing Calculator (Ganzoni Formula)</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { color: #2c3e50; margin-top: 0; font-size: 1.25rem; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 1rem; }
+        .result-box { margin-top: 20px; padding: 15px; background: #e8f4fd; border-radius: 4px; border-left: 5px solid #3498db; }
+        .result-item { margin-bottom: 10px; font-size: 0.95rem; }
+        .highlight { font-weight: bold; color: #2980b9; font-size: 1.1rem; }
+        .footer { font-size: 0.8rem; color: #888; margin-top: 15px; line-height: 1.4; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Iron Dose Calculator</h2>
+    <p style="font-size: 0.85rem; color: #666;">Based on Ganzoni Formula for Anemia in Pregnancy</p>
+    
+    <div class="input-group">
+        <label for="weight">Patient Body Weight (kg)</label>
+        <input type="number" id="weight" placeholder="e.g. 50" oninput="calculateDose()">
+    </div>
+
+    <div class="input-group">
+        <label for="hb">Current Hemoglobin (g/dL)</label>
+        <input type="number" step="0.1" id="hb" placeholder="e.g. 11.0" oninput="calculateDose()">
+    </div>
+
+    <div id="results" class="result-box" style="display:none;">
+        <div class="result-item">Iron Store: <span id="resStore">0</span> mg</div>
+        <div class="result-item">Calculated Dose: <span id="resExact">0</span> mg</div>
+        <div class="result-item">Recommended Dose: <span id="resRounded" class="highlight">0</span> <span class="highlight">mg</span></div>
+        <div style="font-size: 0.75rem; color: #e67e22; margin-top: 5px;">*Rounded to nearest 100mg increment.</div>
+    </div>
+
+    <div class="footer">
+        <strong>Formula:</strong><br>
+        Dose = Wt × [13 - Actual Hb] × 2.4 + Iron Store<br><br>
+        <strong>Iron Store:</strong><br>
+        If < 35kg: 15mg/kg | If ≥ 35kg: 500mg
+    </div>
+</div>
+
+<script>
+    function calculateDose() {
+        const weight = parseFloat(document.getElementById('weight').value);
+        const hb = parseFloat(document.getElementById('hb').value);
+        const targetHb = 13.0;
+        const resultsDiv = document.getElementById('results');
+
+        if (isNaN(weight) || isNaN(hb) || weight <= 0) {
+            resultsDiv.style.display = 'none';
+            return;
+        }
+
+        resultsDiv.style.display = 'block';
+
+        // 1. Calculate Iron Store
+        let ironStore = 0;
+        if (weight < 35) {
+            ironStore = 15 * weight;
+        } else {
+            ironStore = 500;
+        }
+
+        // 2. Calculate Total Dose (Ganzoni Formula)
+        // Dose = weight * (targetHb - actualHb) * 2.4 + ironStore
+        let rawDose = weight * (targetHb - hb) * 2.4 + ironStore;
+        
+        // Ensure dose isn't negative if Hb is already high
+        if (rawDose < 0) rawDose = 0;
+
+        // 3. Rounding to 100mg increments
+        const roundedDose = Math.round(rawDose / 100) * 100;
+
+        // Display results
+        document.getElementById('resStore').innerText = ironStore.toFixed(0);
+        document.getElementById('resExact').innerText = rawDose.toFixed(1);
+        document.getElementById('resRounded').innerText = roundedDose;
+    }
+</script>
+
+</body>
+</html>
