@@ -6,25 +6,12 @@
     <title>Iron Dosing Guide</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding: 40px 20px; }
-        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 100%; max-width: 700px; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 100%; max-width: 850px; }
         
         .header-container { text-align: center; margin-bottom: 20px; }
-        .main-heading { 
-            color: #2c3e50; 
-            margin: 0;
-            font-size: 1.6rem; 
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .sub-heading {
-            color: #7f8c8d;
-            font-size: 1.1rem;
-            margin-top: 5px;
-            font-weight: 400;
-        }
+        .main-heading { color: #2c3e50; margin: 0; font-size: 1.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .sub-heading { color: #7f8c8d; font-size: 1.1rem; margin-top: 5px; font-weight: 400; }
 
-        /* The Formula Box */
         .formula-box {
             background-color: #eef2ff;
             border: 2px solid #3f51b5;
@@ -35,56 +22,76 @@
             text-align: center;
         }
         .ganzoni-title { font-weight: bold; display: block; margin-bottom: 8px; text-decoration: underline; }
-        .formula-text { font-family: "Courier New", Courier, monospace; font-weight: bold; font-size: 0.95rem; line-height: 1.4; }
+        .formula-text { font-family: "Courier New", Courier, monospace; font-weight: bold; font-size: 0.9rem; line-height: 1.4; }
 
-        .instruction { font-weight: bold; color: #2c3e50; margin-bottom: 20px; font-size: 1rem; }
+        .instruction { font-weight: bold; color: #2c3e50; margin-bottom: 20px; font-size: 1rem; border-left: 4px solid #2c3e50; padding-left: 10px; }
 
-        .input-row { 
-            display: flex; 
-            align-items: flex-start; 
-            gap: 20px; 
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
+        .input-row { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 18px; flex-wrap: wrap; }
         .input-group { flex: 1; min-width: 250px; }
         .side-note { 
             flex: 1.2; 
             font-size: 0.85rem; 
-            color: #6c757d; 
-            font-style: italic;
+            color: #5a6268; 
             background: #f8f9fa;
             padding: 10px;
             border-left: 3px solid #dee2e6;
             border-radius: 4px;
+            white-space: pre-line;
+            line-height: 1.4;
         }
         
         label { display: block; margin-bottom: 8px; font-weight: 600; color: #34495e; font-size: 0.9rem; }
-        input { 
-            width: 100%; 
-            padding: 10px; 
-            border: 1px solid #ccd1d1; 
-            border-radius: 6px; 
-            box-sizing: border-box; 
+        input { width: 100%; padding: 10px; border: 1px solid #ccd1d1; border-radius: 6px; box-sizing: border-box; font-size: 1rem; }
+        input[readonly] { background-color: #f1f3f5; cursor: not-allowed; color: #495057; border: 1px solid #dee2e6; }
+
+        .result-box { margin-top: 25px; padding: 20px; background: #fff5f5; border-radius: 8px; border: 2px solid #feb2b2; }
+        .result-item { margin-bottom: 12px; font-size: 1.05rem; color: #2c3e50; display: flex; justify-content: space-between; align-items: center; }
+        .highlight { font-weight: bold; color: #c53030; font-size: 1.7rem; }
+        
+        .admin-section { margin-top: 30px; border-top: 2px solid #2c3e50; padding-top: 20px; }
+        .admin-title { font-weight: bold; font-size: 1.1rem; color: #2c3e50; margin-bottom: 15px; text-decoration: underline; }
+        .admin-text { font-size: 0.95rem; color: #333; line-height: 1.6; margin-bottom: 20px; }
+
+        .max-dose-box {
+            background-color: #fff5f7;
+            border: 2px solid #e53e3e;
+            color: #9b2c2c;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
             font-size: 1rem;
         }
-        /* Style for the non-editable field */
-        input[readonly] {
-            background-color: #e9ecef;
-            cursor: not-allowed;
-            color: #495057;
-        }
 
-        .result-box { 
-            margin-top: 25px; 
-            padding: 20px; 
-            background: #fdf2f2;
-            border-radius: 8px; 
-            border: 1px solid #f5b7b1;
+        .test-dose-note {
+            background-color: #fffaf0;
+            border: 1px solid #feebc8;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #744210;
+            font-weight: 600;
+            text-align: center;
         }
-        .result-item { margin-bottom: 12px; font-size: 1rem; color: #2c3e50; display: flex; justify-content: space-between; align-items: center; }
-        .highlight { font-weight: bold; color: #c0392b; font-size: 1.6rem; }
         
-        .disclaimer { font-size: 0.75rem; color: #bdc3c7; margin-top: 20px; font-style: italic; text-align: center; border-top: 1px solid #eee; padding-top: 15px; }
+        .admin-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; background-color: #fff; margin-bottom: 30px; }
+        .admin-table th, .admin-table td { border: 1px solid #cbd5e0; padding: 12px; text-align: center; }
+        .admin-table th { background-color: #edf2f7; font-weight: bold; color: #2d3748; font-size: 0.9rem; }
+        .admin-table tr:nth-child(even) { background-color: #f8fafc; }
+
+        .reference-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #edf2f7;
+            font-size: 0.8rem;
+            color: #718096;
+            line-height: 1.6;
+        }
+        .ref-title { font-weight: bold; margin-bottom: 8px; color: #4a5568; font-size: 0.9rem; }
+
+        .footer-note { font-size: 0.75rem; color: #a0aec0; margin-top: 20px; text-align: center; }
     </style>
 </head>
 <body>
@@ -107,21 +114,17 @@
     <div class="input-row">
         <div class="input-group">
             <label for="weight">Patient Body Weight (kg)</label>
-            <input type="number" id="weight" placeholder="e.g. 50" oninput="calculateDose()">
+            <input type="number" id="weight" placeholder="Enter weight" oninput="calculateDose()">
         </div>
-        <div class="side-note">
-            The body weight used is the pre-pregnancy weight or weight at booking visit.
-        </div>
+        <div class="side-note">The body weight used is the pre-pregnancy weight or weight at booking visit.</div>
     </div>
 
     <div class="input-row">
         <div class="input-group">
             <label for="hb">Current Hemoglobin level (g/dL)</label>
-            <input type="number" step="0.1" id="hb" placeholder="e.g. 11.0" oninput="calculateDose()">
+            <input type="number" step="0.1" id="hb" placeholder="Enter Hb" oninput="calculateDose()">
         </div>
-        <div class="side-note">
-            Enter the patient's current hemoglobin level for calculation.
-        </div>
+        <div class="side-note">Enter the patient's actual hemoglobin level (g/dl).</div>
     </div>
 
     <div class="input-row">
@@ -129,24 +132,72 @@
             <label for="targetHb">Target Hemoglobin level (g/dL)</label>
             <input type="number" id="targetHb" value="13.0" readonly>
         </div>
-        <div class="side-note">
-            Target haemoglobin level for treatment: 13.0 g/dl
+        <div class="side-note">Target haemoglobin level for treatment: 13.0 g/dl</div>
+    </div>
+
+    <div class="input-row">
+        <div class="input-group">
+            <label for="ironStoreDisplay">Iron Store (mg)</label>
+            <input type="text" id="ironStoreDisplay" value="-" readonly>
         </div>
+        <div class="side-note"><strong>Iron body store: ⁴</strong>
+        If < 35kg: 15mg x weight (kg)
+        If => 35kg: 500mg</div>
     </div>
 
     <div id="results" class="result-box" style="display:none;">
-        <div class="result-item">Iron Store (mg): <span><span id="resStore">0</span> mg</span></div>
-        <div class="result-item" style="border-top: 2px solid #f5b7b1; padding-top: 15px; margin-top: 10px;">
-            <strong>Iron Dose Calculated:</strong> 
-            <span><span id="resRounded" class="highlight">0</span> <span class="highlight">mg</span></span>
+        <div class="result-item">
+            <strong>Exact Iron Dose Calculated:</strong> 
+            <span><span id="resExact" class="highlight">0</span> <span class="highlight">mg</span></span>
         </div>
-        <div style="font-size: 0.8rem; color: #7f8c8d; text-align: right; margin-top: 5px;">The total dose can be rounded off to 100mg increments.</div>
+        <div style="font-size: 0.85rem; color: #718096; text-align: right; margin-top: 5px; font-weight: 500;">
+            The total dose can be rounded off to 100mg increments.
+        </div>
     </div>
 
-    <div class="disclaimer">
-        <strong>Iron body store:</strong><br>
-        If < 35kg: 15mg x weight (kg) | If ≥ 35kg: 500mg<br><br>
-        This tool is for clinical reference only based on the KKP9 Dose Sheet.
+    <div class="admin-section">
+        <div class="admin-title">Method of administration</div>
+        <div class="admin-text">
+            Iron Sucrose Similars (ISS) can be given either as slow IV injection (undiluted) or IV infusion which must only be diluted in sterile 0.9% sodium chloride solution (normal saline).
+        </div>
+
+        <div class="max-dose-box">
+            Intravenous infusion: Maximum single tolerated dose 7 mg/kg once a week (max 500 mg)
+        </div>
+
+        <div class="test-dose-note">
+            Test Dose (for new patient): 20mg in 20ml over 15 minutes
+        </div>
+        
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Dose</th>
+                    <th>No of ampoules</th>
+                    <th>Administer over</th>
+                    <th>Minimum dilution volume of 0.9%NaCl</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>100mg</td><td>1</td><td>15 min</td><td>100ml</td></tr>
+                <tr><td>200mg</td><td>2</td><td>30 min</td><td>200ml</td></tr>
+                <tr><td>300mg</td><td>3</td><td>1.5 hours</td><td>300ml</td></tr>
+                <tr><td>400mg</td><td>4</td><td>2.5 hours</td><td>400ml</td></tr>
+                <tr><td>500mg</td><td>5</td><td>3.5 hours</td><td>500ml</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="reference-section">
+        <div class="ref-title">References:</div>
+        1) Bahagian Pembangunan Kesihatan Keluarga 2026. Consensus Guidelines on Parenteral lron Usage for Pregnant Women at Primary Care Facilities.<br>
+        2) Pavord S, Daru J, Prasannan N, Robinson S, Stanworth S, Girling J, BSH Committee. UK guidelines on the management of iron deficiency in pregnancy. Br J Haematol. 2020.<br>
+        3) Lucas S, Garg M. lntravenous iron: an update. lnternal Medicine Journal. 2024 Jan;54(1).26-34.<br>
+        4) Product Leaflet Ranofer Injection 10mg/5ml. Revision Date: 9 April 2019.
+    </div>
+
+    <div class="footer-note">
+        Clinical reference tool based on KKP9 Dose Sheet. Verify all calculations manually.
     </div>
 </div>
 
@@ -154,30 +205,29 @@
     function calculateDose() {
         const weight = parseFloat(document.getElementById('weight').value);
         const hb = parseFloat(document.getElementById('hb').value);
-        const targetHb = 13.0; // Hardcoded to 13.0
+        const targetHb = 13.0;
         const resultsDiv = document.getElementById('results');
+        const ironStoreInput = document.getElementById('ironStoreDisplay');
 
-        if (isNaN(weight) || isNaN(hb) || weight <= 0) {
+        if (isNaN(weight) || weight <= 0) {
+            ironStoreInput.value = "-";
+            resultsDiv.style.display = 'none';
+            return;
+        }
+
+        let ironStore = (weight < 35) ? (15 * weight) : 500;
+        ironStoreInput.value = ironStore.toFixed(0);
+
+        if (isNaN(hb)) {
             resultsDiv.style.display = 'none';
             return;
         }
 
         resultsDiv.style.display = 'block';
-
-        // 1. Calculate Iron Store
-        let ironStore = (weight < 35) ? (15 * weight) : 500;
-
-        // 2. Ganzoni Formula: weight * (target - actual) * 10 * 0.24 + store
         let rawDose = weight * (targetHb - hb) * 2.4 + ironStore;
-        
         if (rawDose < 0) rawDose = 0;
 
-        // 3. Rounding to 100mg increments
-        const roundedDose = Math.round(rawDose / 100) * 100;
-
-        // Update UI
-        document.getElementById('resStore').innerText = ironStore.toLocaleString();
-        document.getElementById('resRounded').innerText = roundedDose.toLocaleString();
+        document.getElementById('resExact').innerText = Number.isInteger(rawDose) ? rawDose.toLocaleString() : rawDose.toFixed(1);
     }
 </script>
 
